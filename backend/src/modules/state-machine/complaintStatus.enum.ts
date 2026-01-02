@@ -1,0 +1,12 @@
+// complaintStatus.enum.ts
+export enum ComplaintStatus {
+  SUBMITTED = "SUBMITTED",
+  UNDER_REVIEW = "UNDER_REVIEW",
+  ASSIGNED = "ASSIGNED",
+  IN_PROGRESS = "IN_PROGRESS",
+  ESCALATED = "ESCALATED",
+  RESOLVED = "RESOLVED",
+  CLOSED = "CLOSED",
+  REJECTED = "REJECTED",
+  REOPENED = "REOPENED"
+}

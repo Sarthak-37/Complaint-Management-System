@@ -1,0 +1,6 @@
+export enum ComplaintCategory {
+  POLICY_PAYMENTS = "POLICY_PAYMENTS",
+  CLAIMS = "CLAIMS",
+  SUPPORT_APP = "SUPPORT_APP",
+  OTHER = "OTHER"
+}
