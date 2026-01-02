@@ -1,4 +1,4 @@
-import { Clock, User, ArrowRight } from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
 
 interface Props {
   history: {
@@ -64,11 +64,11 @@ const ComplaintTimeline = ({ history }: Props) => {
               </div>
 
               {/* Changed by */}
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+              {/* <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
                 <User className="h-4 w-4 text-[#4756ca]" />
                 <span className="font-semibold text-gray-700">Changed by:</span>
                 <span>{item.changedBy}</span>
-              </div>
+              </div> */}
 
               {/* Timestamp */}
               <div className="flex items-center gap-2 text-xs text-gray-500">

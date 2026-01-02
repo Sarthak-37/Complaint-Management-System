@@ -9,6 +9,8 @@ import {
   updateComplaintStatus
 } from "../../api/complain.api";
 import toast from "react-hot-toast";
+import { History, FileText } from "lucide-react";
+import ComplaintTimeline from "../../components/complaints/ComplainTimeline";
 
 interface Props {
   complaint: any;
@@ -30,6 +32,7 @@ const AdminComplaintDetailsModal = ({
   readOnly = false
 }: Props) => {
   const [history, setHistory] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<"details" | "timeline">("details");
   const isReadOnly =
     readOnly || FINAL_STATES.includes(complaint.status);
 
@@ -85,109 +88,145 @@ const AdminComplaintDetailsModal = ({
             </span>
           </div>
 
-          {/* Meta */}
-          <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-xl p-4">
-            <div><b className="text-gray-700">Category:</b> <span className="font-medium">{complaint.category}</span></div>
-            <div><b className="text-gray-700">User:</b> <span className="font-medium">{complaint.createdBy?.email}</span></div>
+          {/* Tabs */}
+          <div className="flex gap-2 bg-gray-100 p-2 rounded-2xl shadow-sm">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === "details"
+                  ? "bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white shadow-lg"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-white"
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              Details
+            </button>
+            <button
+              onClick={() => setActiveTab("timeline")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === "timeline"
+                  ? "bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white shadow-lg"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-white"
+              }`}
+            >
+              <History className="w-4 h-4" />
+              Timeline
+            </button>
           </div>
 
-          {/* Description */}
-          <div className="bg-white rounded-xl p-4 border border-gray-200">
-            <b className="text-gray-800">Description</b>
-            <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-              {complaint.description}
-            </p>
-          </div>
+          {/* Tab Content */}
+          {activeTab === "details" && (
+            <>
+              {/* Meta */}
+              <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-xl p-4">
+                <div><b className="text-gray-700">Category:</b> <span className="font-medium">{complaint.category}</span></div>
+                <div><b className="text-gray-700">User:</b> <span className="font-medium">{complaint.createdBy?.email}</span></div>
+              </div>
 
-          {/* ADMIN ACTIONS */}
-          {!isReadOnly && (
-            <div className="flex flex-wrap gap-3">
-              {/* SUBMITTED */}
-              {complaint.status === ComplaintStatus.SUBMITTED && (
-                <>
-                  <button
-                    onClick={() =>
-                      changeStatus(ComplaintStatus.UNDER_REVIEW)
+              {/* Description */}
+              <div className="bg-white rounded-xl p-4 border border-gray-200">
+                <b className="text-gray-800">Description</b>
+                <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                  {complaint.description}
+                </p>
+              </div>
+
+              {/* ADMIN ACTIONS */}
+              {!isReadOnly && (
+                <div className="flex flex-wrap gap-3">
+                  {/* SUBMITTED */}
+                  {complaint.status === ComplaintStatus.SUBMITTED && (
+                    <>
+                      <button
+                        onClick={() =>
+                          changeStatus(ComplaintStatus.UNDER_REVIEW)
+                        }
+                        className="px-4 py-2 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                      >
+                        Move to Review
+                      </button>
+                    </>
+                  )}
+
+                  {/* UNDER REVIEW */}
+                  {complaint.status === ComplaintStatus.UNDER_REVIEW && (
+                    <>
+                      <span className="text-sm text-gray-500 bg-gray-100 px-3 py-2 rounded-lg">
+                        Assign from list
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          changeStatus(ComplaintStatus.REJECTED)
+                        }
+                        className="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {/* ESCALATED */}
+                  {complaint.status === ComplaintStatus.ESCALATED && (
+                    <>
+                      <button
+                        onClick={() =>
+                          changeStatus(ComplaintStatus.RESOLVED)
+                        }
+                        className="px-4 py-2 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
+                      >
+                        Resolve
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          changeStatus(ComplaintStatus.REJECTED)
+                        }
+                        className="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {/* Priority (optional for admin) */}
+                  <select
+                    defaultValue={complaint.priority}
+                    onChange={(e) =>
+                      changePriority(
+                        e.target.value as ComplaintPriority
+                      )
                     }
-                    className="px-4 py-2 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                    className="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-[#0fc9e7] focus:ring-4 focus:ring-[#0fc9e7]/20 outline-none transition-all font-medium bg-white"
                   >
-                    Move to Review
-                  </button>
-                </>
+                    {Object.values(ComplaintPriority).map((p) => (
+                      <option key={p} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               )}
-
-              {/* UNDER REVIEW */}
-              {complaint.status === ComplaintStatus.UNDER_REVIEW && (
-                <>
-                  <span className="text-sm text-gray-500 bg-gray-100 px-3 py-2 rounded-lg">
-                    Assign from list
-                  </span>
-
-                  <button
-                    onClick={() =>
-                      changeStatus(ComplaintStatus.REJECTED)
-                    }
-                    className="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
-                  >
-                    Reject
-                  </button>
-                </>
-              )}
-
-              {/* ESCALATED */}
-              {complaint.status === ComplaintStatus.ESCALATED && (
-                <>
-                  <button
-                    onClick={() =>
-                      changeStatus(ComplaintStatus.RESOLVED)
-                    }
-                    className="px-4 py-2 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
-                  >
-                    Resolve
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      changeStatus(ComplaintStatus.REJECTED)
-                    }
-                    className="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
-                  >
-                    Reject
-                  </button>
-                </>
-              )}
-
-              {/* Priority (optional for admin) */}
-              <select
-                defaultValue={complaint.priority}
-                onChange={(e) =>
-                  changePriority(
-                    e.target.value as ComplaintPriority
-                  )
-                }
-                className="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-[#0fc9e7] focus:ring-4 focus:ring-[#0fc9e7]/20 outline-none transition-all font-medium bg-white"
-              >
-                {Object.values(ComplaintPriority).map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </div>
+            </>
           )}
 
-          {/* Timeline */}
-          <div className="bg-white rounded-xl p-4 border border-gray-200">
-            <b className="text-gray-800">Status History</b>
-            <ul className="text-sm mt-3 space-y-2">
-              {history.map((h, i) => (
-                <li key={i} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                  <span className="font-medium text-gray-700">{h.from} → {h.to}</span>
-                  <span className="text-gray-500">({new Date(h.changedAt).toLocaleString()})</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Timeline Tab */}
+          {activeTab === "timeline" && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <History className="h-5 w-5 text-[#4756ca]" />
+                Status History
+              </h3>
+              {history.length ? (
+                <ComplaintTimeline history={history} />
+              ) : (
+                <div className="text-center py-12">
+                  <History className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500 font-medium">No status history available</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

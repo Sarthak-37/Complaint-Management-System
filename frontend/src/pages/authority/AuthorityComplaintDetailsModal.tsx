@@ -8,8 +8,9 @@ import {
   updateComplaintStatus
 } from "../../api/complain.api";
 import toast from "react-hot-toast";
-import { History, User, Tag } from "lucide-react";
+import { History, User, Tag, FileText } from "lucide-react";
 import ComplaintTimeline from "../../components/complaints/ComplainTimeline";
+import { useState } from "react";
 interface Props {
   complaint: IComplaint;
   onClose: () => void;
@@ -28,6 +29,7 @@ const AuthorityComplaintDetailsModal = ({
   onClose,
   onUpdated,
 }: Props) => {
+  const [activeTab, setActiveTab] = useState<"details" | "timeline">("details");
   const isReadOnly = FINAL_STATES.includes(complaint.status);
 
   const changeStatus = async (nextStatus: ComplaintStatus) => {
@@ -81,102 +83,135 @@ const AuthorityComplaintDetailsModal = ({
             </span>
           </div>
 
-          {/* Meta Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
-              <Tag className="h-5 w-5 text-[#4756ca]" />
-              <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Category</p>
-                <p className="font-semibold text-gray-800">{complaint.category}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
-              <User className="h-5 w-5 text-[#4756ca]" />
-              <div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">User</p>
-                <p className="font-semibold text-gray-800">{complaint.createdBy?.email}</p>
-              </div>
-            </div>
+          {/* Tabs */}
+          <div className="flex gap-2 bg-gray-100 p-2 rounded-2xl shadow-sm">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === "details"
+                  ? "bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white shadow-lg"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-white"
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              Details
+            </button>
+            <button
+              onClick={() => setActiveTab("timeline")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === "timeline"
+                  ? "bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white shadow-lg"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-white"
+              }`}
+            >
+              <History className="w-4 h-4" />
+              Timeline
+            </button>
           </div>
 
-          {/* Description */}
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-800 mb-3">Description</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {complaint.description}
-            </p>
-          </div>
-
-          {/* Actions */}
-          {!isReadOnly && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Actions</h3>
-              <div className="flex flex-wrap gap-3">
-                {complaint.status === ComplaintStatus.ASSIGNED && (
-                  <>
-                    <button
-                      onClick={() => changeStatus(ComplaintStatus.IN_PROGRESS)}
-                      className="px-6 py-3 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
-                    >
-                      Start Progress
-                    </button>
-                    <button
-                      onClick={() => changeStatus(ComplaintStatus.REJECTED)}
-                      className="px-6 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
-                    >
-                      Reject
-                    </button>
-                  </>
-                )}
-
-                {complaint.status === ComplaintStatus.IN_PROGRESS && (
-                  <>
-                    <button
-                      onClick={() => changeStatus(ComplaintStatus.RESOLVED)}
-                      className="px-6 py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
-                    >
-                      Resolve
-                    </button>
-                    <button
-                      onClick={() => changeStatus(ComplaintStatus.ESCALATED)}
-                      className="px-6 py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all"
-                    >
-                      Escalate
-                    </button>
-                  </>
-                )}
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Change Priority</label>
-                  <select
-                    defaultValue={complaint.priority}
-                    onChange={(e) => changePriority(e.target.value as ComplaintPriority)}
-                    className="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-[#0fc9e7] focus:ring-4 focus:ring-[#0fc9e7]/20 outline-none transition-all font-medium bg-white"
-                  >
-                    {Object.values(ComplaintPriority).map((p) => (
-                      <option key={p} value={p}>{p}</option>
-                    ))}
-                  </select>
+          {/* Tab Content */}
+          {activeTab === "details" && (
+            <>
+              {/* Meta Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
+                  <Tag className="h-5 w-5 text-[#4756ca]" />
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Category</p>
+                    <p className="font-semibold text-gray-800">{complaint.category}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
+                  <User className="h-5 w-5 text-[#4756ca]" />
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">User</p>
+                    <p className="font-semibold text-gray-800">{complaint.createdBy?.email}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+
+              {/* Description */}
+              <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                <h3 className="text-lg font-bold text-gray-800 mb-3">Description</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {complaint.description}
+                </p>
+              </div>
+
+              {/* Actions */}
+              {!isReadOnly && (
+                <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-800 mb-4">Actions</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {complaint.status === ComplaintStatus.ASSIGNED && (
+                      <>
+                        <button
+                          onClick={() => changeStatus(ComplaintStatus.IN_PROGRESS)}
+                          className="px-6 py-3 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                        >
+                          Start Progress
+                        </button>
+                        <button
+                          onClick={() => changeStatus(ComplaintStatus.REJECTED)}
+                          className="px-6 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+
+                    {complaint.status === ComplaintStatus.IN_PROGRESS && (
+                      <>
+                        <button
+                          onClick={() => changeStatus(ComplaintStatus.RESOLVED)}
+                          className="px-6 py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all"
+                        >
+                          Resolve
+                        </button>
+                        <button
+                          onClick={() => changeStatus(ComplaintStatus.ESCALATED)}
+                          className="px-6 py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all"
+                        >
+                          Escalate
+                        </button>
+                      </>
+                    )}
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Change Priority</label>
+                      <select
+                        defaultValue={complaint.priority}
+                        onChange={(e) => changePriority(e.target.value as ComplaintPriority)}
+                        className="border-2 border-gray-200 rounded-xl px-4 py-2 focus:border-[#0fc9e7] focus:ring-4 focus:ring-[#0fc9e7]/20 outline-none transition-all font-medium bg-white"
+                      >
+                        {Object.values(ComplaintPriority).map((p) => (
+                          <option key={p} value={p}>{p}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
-          {/* Timeline */}
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <History className="h-5 w-5 text-[#4756ca]" />
-              Status History
-            </h3>
-            {complaint.statusHistory?.length ? (
-              <ComplaintTimeline history={complaint.statusHistory} />
-            ) : (
-              <div className="text-center py-12">
-                <History className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No status history available</p>
-              </div>
-            )}
-          </div>
+          {/* Timeline Tab */}
+          {activeTab === "timeline" && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <History className="h-5 w-5 text-[#4756ca]" />
+                Status History
+              </h3>
+              {complaint.statusHistory?.length ? (
+                <ComplaintTimeline history={complaint.statusHistory} />
+              ) : (
+                <div className="text-center py-12">
+                  <History className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500 font-medium">No status history available</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
