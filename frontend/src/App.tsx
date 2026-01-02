@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RoleGuard from "./auth/RoleGuard";
 import ToastProvider from "./components/ToastProvider";
 import AuthLayout from "./components/auth/AuthLayout";
+import Footer from "./components/Footer";
 
 import AdminDashboard from "./pages/admin/Dashboard";
 import AuthorityDashboard from "./pages/authority/Dashboard";
@@ -97,6 +98,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
