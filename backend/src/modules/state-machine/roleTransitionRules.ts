@@ -18,6 +18,8 @@ export const ROLE_ALLOWED_TRANSITIONS = {
     [ComplaintStatus.SUBMITTED, ComplaintStatus.UNDER_REVIEW],
     [ComplaintStatus.UNDER_REVIEW, ComplaintStatus.ASSIGNED],
     [ComplaintStatus.UNDER_REVIEW, ComplaintStatus.REJECTED],
+    [ComplaintStatus.REOPENED, ComplaintStatus.ASSIGNED],
+    [ComplaintStatus.REOPENED, ComplaintStatus.REJECTED],
     [ComplaintStatus.ESCALATED, ComplaintStatus.REJECTED],
     [ComplaintStatus.ESCALATED, ComplaintStatus.RESOLVED]
   ]

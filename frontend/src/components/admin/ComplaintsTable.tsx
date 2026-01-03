@@ -100,6 +100,44 @@ export default function AdminComplaintsTable({
                     </button>
                   </>
                 )}
+
+                {/* ESCALATED */}
+                {c.status === ComplaintStatus.ESCALATED && (
+                  <>
+                    <button
+                      onClick={() => onReview?.(c._id)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-all"
+                    >
+                      Resolve
+                    </button>
+
+                    <button
+                      onClick={() => onReject?.(c._id)}
+                      className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all"
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+
+                {/* REOPENED */}
+                {c.status === ComplaintStatus.REOPENED && (
+                  <>
+                    <button
+                      onClick={() => onAssign?.(c)}
+                      className="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-all"
+                    >
+                      Assign
+                    </button>
+
+                    <button
+                      onClick={() => onReject?.(c._id)}
+                      className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all"
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}

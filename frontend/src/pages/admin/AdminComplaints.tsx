@@ -15,6 +15,7 @@ const AdminComplaints = () => {
   const [submitted, setSubmitted] = useState<IComplaint[]>([]);
   const [underReview, setUnderReview] = useState<IComplaint[]>([]);
   const [escalated, setEscalated] = useState<IComplaint[]>([]);
+  const [reopened, setReopened] = useState<IComplaint[]>([]);
   const [loading, setLoading] = useState(false);
 
   /* ---------------- ASSIGN MODAL STATE ---------------- */
@@ -34,16 +35,19 @@ const AdminComplaints = () => {
       const [
         submittedData,
         underReviewData,
-        escalatedData
+        escalatedData,
+        reopenedData
       ] = await Promise.all([
         fetchAdminComplaints({ status: "SUBMITTED" }),
         fetchAdminComplaints({ status: "UNDER_REVIEW" }),
-        fetchAdminComplaints({ status: "ESCALATED" })
+        fetchAdminComplaints({ status: "ESCALATED" }),
+        fetchAdminComplaints({ status: "REOPENED" })
       ]);
 
       setSubmitted(submittedData);
       setUnderReview(underReviewData);
       setEscalated(escalatedData);
+      setReopened(reopenedData);
     } finally {
       setLoading(false);
     }
@@ -149,6 +153,20 @@ const AdminComplaints = () => {
               complaints={escalated}
               onView={openView}
               onReview={resolveEscalated} // reuse Review slot as Resolve
+              onReject={rejectComplaint}
+            />
+          </section>
+
+          {/* ---------------- REOPENED ---------------- */}
+          <section>
+            <h3 className="font-medium mb-3 text-purple-600">
+              Reopened Complaints
+            </h3>
+
+            <AdminComplaintsTable
+              complaints={reopened}
+              onView={openView}
+              onAssign={openAssign}
               onReject={rejectComplaint}
             />
           </section>

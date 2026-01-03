@@ -35,7 +35,8 @@ export const ALLOWED_TRANSITIONS: Record<
   ],
 
   [ComplaintStatus.REOPENED]: [
-    ComplaintStatus.UNDER_REVIEW
+    ComplaintStatus.ASSIGNED,
+    ComplaintStatus.REJECTED
   ],
 
   [ComplaintStatus.CLOSED]: [],     // FINAL

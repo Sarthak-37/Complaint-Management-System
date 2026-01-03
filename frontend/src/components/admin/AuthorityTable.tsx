@@ -15,7 +15,7 @@ export default function AuthorityTable({
       <table className="w-full text-sm">
         <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
-            <th className="px-6 py-4 text-left font-bold text-gray-700 uppercase tracking-wide">Name</th>
+            {/* <th className="px-6 py-4 text-left font-bold text-gray-700 uppercase tracking-wide">Name</th> */}
             <th className="px-6 py-4 text-left font-bold text-gray-700 uppercase tracking-wide">Email</th>
             <th className="px-6 py-4 text-left font-bold text-gray-700 uppercase tracking-wide">Categories</th>
             <th className="px-6 py-4 text-left font-bold text-gray-700 uppercase tracking-wide">Status</th>
@@ -26,7 +26,7 @@ export default function AuthorityTable({
         <tbody>
           {users.map((u) => (
             <tr key={u._id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 font-semibold text-gray-800">{u.name}</td>
+              {/* <td className="px-6 py-4 font-semibold text-gray-800">{u.name}</td> */}
               <td className="px-6 py-4 text-gray-700">{u.email}</td>
               <td className="px-6 py-4">
                 <div className="flex gap-2 flex-wrap">
