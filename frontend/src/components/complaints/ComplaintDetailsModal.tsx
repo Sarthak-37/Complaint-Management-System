@@ -51,7 +51,7 @@ const ComplaintDetailsModal = ({ complaint, isOpen, onClose }: Props) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl bg-[#fcfcfc] shadow-2xl">
+      <div className="relative max-h-[70vh] w-full max-w-2xl overflow-auto rounded-2xl bg-[#fcfcfc] shadow-2xl">
         
         {/* Header with linear */}
         <div className="sticky top-0 z-10 bg-linear-to-r from-[#3186b2] to-[#4756ca] p-6 rounded-t-2xl">
