@@ -21,9 +21,9 @@ const CreateComplaintCTA = () => {
 
         <button
           onClick={() => navigate("/user/complaints/new")}
-          className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-xl hover:scale-105 transition-all"
+          className="flex items-center gap-2 px-3 py-2 bg-[#3186b2] text-white rounded-l font-bold hover:shadow-l hover:scale-105 transition-all"
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-3 w-3" />
           New Complaint
         </button>
       </div>
