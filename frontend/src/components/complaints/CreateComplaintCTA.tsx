@@ -21,12 +21,27 @@ const CreateComplaintCTA = () => {
 
         <button
           onClick={() => navigate("/user/complaints/new")}
-          className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-[#3186b2] to-[#4756ca] text-white rounded-xl font-bold hover:shadow-xl hover:scale-105 transition-all"
+          className="
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 sm:px-6
+            py-2.5 sm:py-3
+            text-sm sm:text-base
+            bg-linear-to-r from-[#3186b2] to-[#4756ca]
+            text-white
+            rounded-lg sm:rounded-xl
+            font-semibold sm:font-bold
+            transition-all duration-200
+            hover:shadow-xl hover:scale-[1.03]
+            active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2
+          "
         >
-          <Plus className="h-5 w-5" />
-          New Complaint
+          <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="whitespace-nowrap">New Complaint</span>
         </button>
-        
+
+
       </div>
     </div>
   );
