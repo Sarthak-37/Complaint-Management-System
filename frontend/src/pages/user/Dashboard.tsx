@@ -5,7 +5,7 @@ const UserDashboard = () => {
   return (
     <div className="space-y-6">
       <CreateComplaintCTA />
-        <div className="grid grid-cols-1 lg:grid-cols-3 lg:col-span-4 gap-2">
+        <div className="lg:col-span-2">
           <ComplaintList />
         </div>
     </div>
