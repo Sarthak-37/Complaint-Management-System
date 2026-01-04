@@ -1,9 +1,5 @@
-//import bcrypt from "bcrypt";
 import { User, AccountStatus } from "../auth/user.model.js";
-import type { IUser } from "../auth/user.model.js";
-//import { sendVerificationEmail } from "../auth/email.service.js";
 import crypto from "crypto";
-//import { VerificationToken } from "../auth/verificationToken.model.js";
 import { InviteToken } from "../auth/inviteToken.model.js";
 import { sendAuthorityInviteEmail } from "../auth/email.service.js";
 import { ComplaintCategory } from "../complaint/complaintCategory.enum.js";
@@ -13,6 +9,7 @@ import { ComplaintStatus } from "../state-machine/complaintStatus.enum.js";
 
 export class AdminService {
 
+  // service to invite authorities on platform
 static async inviteAuthority(
   email: string,
   categories: ComplaintCategory[],
@@ -44,6 +41,7 @@ static async inviteAuthority(
   );
 }
 
+ //service update user status
   static async updateUserStatus(
   id: string,
   action: "ACTIVATE" | "SUSPEND"
@@ -69,6 +67,7 @@ static async inviteAuthority(
   return user;
 }
 
+//service to list all users and authorities on platform
   static async listUsers(filters: {
     role?: string;
     status?: AccountStatus;
@@ -83,6 +82,7 @@ static async inviteAuthority(
     return User.find(query).select("-password");
   }
 
+  //service to assign complaints to Authority
   static async assignComplaint(
     complaintId: string,
     authorityId: string

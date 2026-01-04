@@ -24,13 +24,12 @@ router.post(
   AdminController.assignComplaint
 );
 
-
+// route update user status
 router.patch("/users/:id/status",
   requireAuth,
   requireVerifiedUser,
   authorizeRoles("ADMIN"),
   AdminController.updateUserStatus);
-
 
 router.get("/users",
   requireAuth,

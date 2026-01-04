@@ -39,10 +39,7 @@ export async function fetchAdminComplaints(params?: {
   return res.data;
 }
 
-/**
- * Admin transitions complaint status
- * SUBMITTED → UNDER_REVIEW / REJECTED
- */
+//change complaintStatus
 export async function transitionComplaintStatus(
   complaintId: string,
   nextStatus: ComplaintStatus
@@ -52,10 +49,7 @@ export async function transitionComplaintStatus(
   });
 }
 
-/**
- * Assign complaint to authority
- * UNDER_REVIEW → ASSIGNED
- */
+//assign complaints to authority
 export async function assignComplaint(payload: {
   complaintId: string;
   authorityId: string;
@@ -63,6 +57,7 @@ export async function assignComplaint(payload: {
   return api.post("/admin/assign-complaint", payload);
 }
 
+//fetch authorities by Category
 export async function fetchAuthoritiesByCategory(
   category: ComplaintCategory
 ) {

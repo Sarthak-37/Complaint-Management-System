@@ -26,7 +26,7 @@ export async function requireAuth(
       role: UserRole;
     };
 
-    // 🔽 FETCH FULL USER CONTEXT
+    //FETCH FULL USER CONTEXT
     const user = await User.findById(decoded.id).select(
       "_id username email role categories"
     );
@@ -35,7 +35,7 @@ export async function requireAuth(
       return res.status(401).json({ message: "User not found" });
     }
 
-    // ✅ Attach FULL AuthUser
+    //Attach FULL AuthUser
     (req as any).user = {
       id: user._id.toString(),
       username: user.username,

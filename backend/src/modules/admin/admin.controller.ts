@@ -7,6 +7,7 @@ import { ComplaintCategory } from "../complaint/complaintCategory.enum.js";
 
 export class AdminController {
 
+  //controller to invite authorities on platform
   static async inviteAuthority(req: Request, res: Response) {
     const { email, categories, instructions } = req.body;
 
@@ -22,6 +23,7 @@ export class AdminController {
     res.status(201).json(result);
   }
 
+  //controller to update userStatus
   static async updateUserStatus(req: Request, res: Response) {
     const { id } = req.params;
     const { action } = req.body;
@@ -36,6 +38,7 @@ export class AdminController {
     res.json({ message: "User status updated", user });
   }
 
+  //controller to list all users and authorities
   static async listUsers(req: Request, res: Response) {
   const { role, status } = req.query;
 
@@ -60,6 +63,7 @@ export class AdminController {
   res.json(users);
   } 
 
+  //controller to assign complaints to user
   static async assignComplaint(req: Request, res: Response) {
     const { complaintId, authorityId } =
       req.body as AssignComplaintDto;
